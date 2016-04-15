@@ -3,6 +3,7 @@ const path = require('path');
 const gulp = require('gulp');
 const HubRegistry = require('gulp-hub');
 const browserSync = require('browser-sync');
+const eslint = require('gulp-eslint');
 
 const conf = require('./conf/gulp.conf');
 
@@ -27,5 +28,14 @@ gulp.task('watch', watch);
 
 function watch(done) {
   gulp.watch(path.join(conf.paths.tmp, 'index.html'), browserSync.reload);
+  gulp.watch('src/**/*.js', gulp.parallel('eslint'));
   done();
+}
+
+gulp.task('eslint', eslintCheck);
+
+function eslintCheck() {
+  return gulp.src(['src/**/*.js'])
+    .pipe(eslint())
+    .pipe(eslint.format());
 }
